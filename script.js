@@ -26,6 +26,7 @@ const divide = function(a, b) {
 
 const operate = function(num1, operator, num2) {
     if (operator === "÷" && Number(num2) === 0) return "NO!";
+    if (num1 === "0." || num2 === "0.") return "NO!";
     let res;
     switch (operator) {
         case "+":
@@ -112,33 +113,11 @@ const populateDisplay = function(input) {
             firstNum = firstNum + input;
         }
     }
-    console.log([firstNum, operator, secondNum])
 };
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
         populateDisplay(button.textContent);
-    });
-    button.addEventListener("keydown", (e) => {
-        let input = e.key;
-        console.log(input);
-        if (listOfKeyboardKeys.includes(input)) {
-            if (typeof(Number(input)) === "number" || input === "." || input === "+"){
-                populateDisplay(input);
-            } else {
-                switch (input) {
-                    case "-":
-                        populateDisplay("−");
-                        break;
-                    case "*":
-                        populateDisplay("×");
-                        break;
-                    case "/":
-                        populateDisplay("÷");
-                        break;
-                }
-            }
-        }
     });
 });
 
@@ -153,34 +132,11 @@ clearButton.addEventListener("click", () => {
     display.classList.add("display-result");
 });
 
-clearButton.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-       display.textContent = "0";
-        firstNum = 0;
-        operator = "";
-        secondNum = 0;
-        equalButton.classList.remove("ready");
-        display.classList.add("display-result"); 
-    }
-});
-
 const equalButton = document.querySelector("#equals");
 
 equalButton.addEventListener("click", () =>{
     let result = operate(firstNum, operator, secondNum);
     if (equalButton.classList.contains("ready")) {
-        display.textContent = result;
-        firstNum = result;
-        operator = "";
-        secondNum = 0;
-        equalButton.classList.toggle("ready");
-        display.classList.add("display-result");
-    }
-});
-
-equalButton.addEventListener("keydown", (e) => {
-    let result = operate(firstNum, operator, secondNum);
-    if (equalButton.classList.contains("ready") && e.key === "=") {
         display.textContent = result;
         firstNum = result;
         operator = "";
