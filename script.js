@@ -1,5 +1,13 @@
 const listOfOperators = ["+", "−", "×", "÷"];
 
+const listOfKeyboardKeys= [
+    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","." , "+"
+];
+
+const listOfSpecialKeys = [
+    "-", "*", "/",
+];
+
 const add = function(a, b) {
     return Number(a) + Number(b);
 };
@@ -102,12 +110,32 @@ const populateDisplay = function(input) {
             firstNum = firstNum + input;
         }
     }
-    console.log([firstNum, operator, secondNum]);
 };
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
         populateDisplay(button.textContent);
+    });
+    button.addEventListener("keydown", (e) => {
+        let input = e.key;
+        console.log(input);
+        if (listOfKeyboardKeys.includes(input)) {
+            if (typeof(Number(input)) === "number" || input === "." || input === "+"){
+                populateDisplay(input);
+            } else {
+                switch (input) {
+                    case "-":
+                        populateDisplay("−");
+                        break;
+                    case "*":
+                        populateDisplay("×");
+                        break;
+                    case "/":
+                        populateDisplay("÷");
+                        break;
+                }
+            }
+        }
     });
 });
 
@@ -122,11 +150,68 @@ clearButton.addEventListener("click", () => {
     display.classList.add("display-result");
 });
 
+clearButton.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+       display.textContent = "0";
+        firstNum = 0;
+        operator = "";
+        secondNum = 0;
+        equalButton.classList.remove("ready");
+        display.classList.add("display-result"); 
+    }
+});
+
 const equalButton = document.querySelector("#equals");
 
 equalButton.addEventListener("click", () =>{
     let result = operate(firstNum, operator, secondNum);
     if (equalButton.classList.contains("ready")) {
+        display.textContent = result;
+        firstNum = result;
+        operator = "";
+        secondNum = 0;
+        equalButton.classList.toggle("ready");
+        display.classList.add("display-result");
+    }
+});
+
+equalButton.addEventListener("keydown", (e) => {
+    let result = operate(firstNum, operator, secondNum);
+    if (equalButton.classList.contains("ready") && e.key === "=") {
+        display.textContent = result;
+        firstNum = result;
+        operator = "";
+        secondNum = 0;
+        equalButton.classList.toggle("ready");
+        display.classList.add("display-result");
+    }
+});
+
+document.addEventListener("keydown", (e) => {
+    let result = operate(firstNum, operator, secondNum);
+    let input = e.key;
+    if (listOfKeyboardKeys.includes(input)) {
+        populateDisplay(input);
+    } else if (listOfSpecialKeys.includes(input)) {
+            switch (input) {
+                case "-":
+                    populateDisplay("−");
+                    break;
+                case "*":
+                    populateDisplay("×");
+                    break;
+                case "/":
+                    populateDisplay("÷");
+                    break;
+            }
+    } else if (e.key === "Escape") {
+        display.textContent = "0";
+        firstNum = 0;
+        operator = "";
+        secondNum = 0;
+        equalButton.classList.remove("ready");
+        display.classList.add("display-result"); 
+    } else if (equalButton.classList.contains("ready") && e.key === "=") {
         display.textContent = result;
         firstNum = result;
         operator = "";
