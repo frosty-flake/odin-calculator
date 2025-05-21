@@ -51,14 +51,26 @@ let operator = "";
 let secondNum = 0;
 
 const populateDisplay = function(input) {
-    let displayText = display.textContent
-    //if input is an operator
+    let displayText = display.textContent;
+    if (displayText === "NO!") {
+        display.textContent = "0";
+        firstNum = 0;
+    }
+    if (input == "0" && displayText == "0") {
+        display.textContent = "0";
+    } else if (display.classList.contains("display-result") && !(findOperator(input))) {
+        display.textContent = "";
+        display.classList.remove("display-result");
+    } else if (display.classList.contains("display-result") && findOperator(input)) {
+        display.classList.remove("display-result");
+    }
     if (findOperator(input)) {
         if (findOperator(displayText)) {
             if (typeof(Number(displayText.at(-1))) === "number" || displayText.at(-1) === ".") {
                 display.textContent = operate(firstNum, operator, secondNum) + input;
                 firstNum = operate(firstNum, operator, secondNum);
                 secondNum = 0;
+                equalButton.classList.toggle("ready");
             } else {
                 display.textContent = displayText.slice(0,displayText.length - 1) + input;
             }
@@ -78,10 +90,14 @@ const populateDisplay = function(input) {
                 display.textContent += input;
             }
         }
+    } else if (displayText == "0" && input == "0") {
+        display.textContent = input;
+        display.classList.add("display-result");
     } else {
         display.textContent += input;
         if (findOperator(displayText)) {
             secondNum = secondNum + input;
+            equalButton.classList.add("ready");
         } else {
             firstNum = firstNum + input;
         }
@@ -98,20 +114,24 @@ buttons.forEach((button) => {
 const clearButton = document.querySelector("#clear");
 
 clearButton.addEventListener("click", () => {
-    display.textContent = "";
+    display.textContent = "0";
     firstNum = 0;
     operator = "";
     secondNum = 0;
+    equalButton.classList.remove("ready");
+    display.classList.add("display-result");
 });
 
 const equalButton = document.querySelector("#equals");
 
 equalButton.addEventListener("click", () =>{
     let result = operate(firstNum, operator, secondNum);
-    if (result != undefined && result != NaN) {
+    if (equalButton.classList.contains("ready")) {
         display.textContent = result;
         firstNum = result;
         operator = "";
         secondNum = 0;
+        equalButton.classList.toggle("ready");
+        display.classList.add("display-result");
     }
 });
