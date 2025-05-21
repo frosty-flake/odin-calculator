@@ -92,9 +92,10 @@ const populateDisplay = function(input) {
             if (!(secondNum.toString().split("").includes("."))) {
                 secondNum = secondNum + input;
                 display.textContent += input;
+                equalButton.classList.add("ready");
             }
         } else {
-            if (!(firstNum.toString().split("").includes("."))) {
+            if (!(firstNum.toString().split("").includes("."))) {              
                 firstNum = firstNum + input;
                 display.textContent += input;
             }
@@ -111,6 +112,7 @@ const populateDisplay = function(input) {
             firstNum = firstNum + input;
         }
     }
+    console.log([firstNum, operator, secondNum])
 };
 
 buttons.forEach((button) => {
