@@ -41,7 +41,7 @@ const operate = function(num1, operator, num2) {
             res = divide(num1, num2);
             break;
     }
-    return Math.round(res * 1000) / 1000;
+    return Math.round(res * (10 ** 5)) / (10 ** 5);
 };
 
 const findOperator = function(string) {
@@ -60,6 +60,7 @@ let secondNum = 0;
 
 const populateDisplay = function(input) {
     let displayText = display.textContent;
+    if (displayText.length >= 9) return;
     if (displayText === "NO!") {
         display.textContent = "0";
         firstNum = 0;
@@ -211,12 +212,12 @@ document.addEventListener("keydown", (e) => {
         secondNum = 0;
         equalButton.classList.remove("ready");
         display.classList.add("display-result"); 
-    } else if (equalButton.classList.contains("ready") && e.key === "=") {
+    } else if (equalButton.classList.contains("ready") && (e.key === "=" || e.key === "Enter")) {
         display.textContent = result;
         firstNum = result;
         operator = "";
         secondNum = 0;
         equalButton.classList.toggle("ready");
         display.classList.add("display-result");
-    }
+    };
 });
